@@ -7,13 +7,50 @@
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🪃</text></svg>" />
   <title>ANX.Trails - Realtime Multiplayer Neon Trails and Pings</title>
+  <meta name="description" content="Realtime Multi-player Mouse/Touch Trails Canvas">
+  <meta name="author" content="AEonAX">
+  <meta name="copyright" content="2024">
+  <meta name="robots" content="index, follow">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ANX.Trails">
+  <meta name="twitter:site" content="@aeonax">
+  <meta name="twitter:description"
+    content="Make neon glowing trails with your friends on our canvas. A playful playground for your loved ones.">
+  <meta name="twitter:image" content="https://trails.aeonax.com/preview.webp">
+  <meta name="twitter:image:alt" content="Neon trails on dark background from multiple people">
+
+  <script type="importmap">
+  	{
+  		"imports": {
+  			"three": "https://cdn.jsdelivr.net/npm/three@0.169.0/+esm",
+  			"three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+  		}
+  	}
+  </script>
 </head>
 
 <body>
   <div id="app">
     <canvas class="webgl"></canvas>
+
   </div>
   <script type="module" src="/src/main.ts"></script>
+  <div class="footer">
+    <span>Made with <span class="heart">♥</span> by <a class="link" href="https://studios.aeonax.com">AEonAX</a></span>
+    <span title="Max Users Connected">
+      <span id="ConnCount">0</span>
+      <svg xmlns="http://www.w3.org/2000/svg" style="height: 0.8rem;" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+      </svg>
+    </span>
+    <a id="FullscreenToggle">Go Big</a>
+  </div>
 </body>
 
 </html>
