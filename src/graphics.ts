@@ -53,7 +53,7 @@ function createTrailGeometry(): THREE.BufferGeometry<THREE.NormalBufferAttribute
 }
 
 // Update trail positions
-function updateTrailPositions(trail: { points: THREE.Points<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.MeshStandardMaterial, THREE.Object3DEventMap>; x: number; y: number, z: number }) {
+function updateTrailPositions(trail: { points: THREE.Points<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.PointsMaterial, THREE.Object3DEventMap>; x: number; y: number, z: number }) {
     const positions = trail.points.geometry.attributes.position.array;
     for (let i = 0; i < noOfPoints; i++) {
         const i3 = i * 3;
@@ -65,7 +65,7 @@ function updateTrailPositions(trail: { points: THREE.Points<THREE.BufferGeometry
         } else {
             const currentPoint = new THREE.Vector3(positions[i3], positions[i3 + 1], positions[i3 + 2]);
             const previousPoint = new THREE.Vector3(positions[previous], positions[previous + 1], positions[previous + 2]);
-            const lerpPoint = currentPoint.lerp(previousPoint, 0.9);
+            const lerpPoint = currentPoint.lerp(previousPoint, 0.9); 
             positions[i3] = lerpPoint.x;
             positions[i3 + 1] = lerpPoint.y;
             positions[i3 + 2] = trail.z;
@@ -73,6 +73,7 @@ function updateTrailPositions(trail: { points: THREE.Points<THREE.BufferGeometry
     }
     trail.points.geometry.attributes.position.needsUpdate = true;
 }
+
 
 // Update trail
 export function updateTrail(sessionId: string, normalizedX: number, normalizedY: number) {
@@ -84,10 +85,10 @@ export function updateTrail(sessionId: string, normalizedX: number, normalizedY:
 
     if (!trails[sessionId]) {
         const geometry = createTrailGeometry();
-        const material = new THREE.MeshStandardMaterial({
+        const material = new THREE.PointsMaterial({
             color: (Math.random() * 0.25 + 0.5) * 0xffffff,
-            emissive: (Math.random() * 0.25 + 0.5) * 0xffffff,
-            emissiveIntensity: 50
+            size: 0.05,
+            sizeAttenuation: true
         });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
