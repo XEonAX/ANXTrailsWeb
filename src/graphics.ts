@@ -5,7 +5,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 
 interface TrailMap {
     [key: string]: {
-        points: THREE.Points<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.MeshStandardMaterial, THREE.Object3DEventMap>,
+        points: THREE.Points<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.ShaderMaterial, THREE.Object3DEventMap>,
         x: number,
         y: number,
         z: number
@@ -41,19 +41,37 @@ const pings: { mesh: THREE.Mesh<THREE.CircleGeometry, THREE.MeshStandardMaterial
 // Create trail geometry
 function createTrailGeometry(): THREE.BufferGeometry<THREE.NormalBufferAttributes> {
     const positions = new Float32Array(noOfPoints * 3);
+    const sizes = new Float32Array(noOfPoints);
+    const colors = new Float32Array(noOfPoints * 3); // 3 values per vertex (r, g, b)
+
+    const hexColor = (Math.random() * 0.3 + 0.4) * 0xffffff;
+    const red = ((hexColor >> 16) & 255) / 255;
+    const green = ((hexColor >> 8) & 255) / 255;
+    const blue = (hexColor & 255) / 255;
+
     for (let i = 0; i < noOfPoints; i++) {
         const i3 = i * 3;
         positions[i3] = (i / (noOfPoints - 1) - 0.5) * 3;
         positions[i3 + 1] = Math.sin(i / 10.5) * 0.5;
         positions[i3 + 2] = 1;
+
+        colors[i3] = red;
+        colors[i3 + 1] = green;
+        colors[i3 + 2] = blue;
+
+        sizes[i] = (noOfPoints - i) / (noOfPoints * 50);
     }
+
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
     return geometry;
 }
 
+
 // Update trail positions
-function updateTrailPositions(trail: { points: THREE.Points<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.MeshStandardMaterial, THREE.Object3DEventMap>; x: number; y: number, z: number }) {
+function updateTrailPositions(trail: { points: THREE.Points<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.ShaderMaterial, THREE.Object3DEventMap>; x: number; y: number, z: number }) {
     const positions = trail.points.geometry.attributes.position.array;
     for (let i = 0; i < noOfPoints; i++) {
         const i3 = i * 3;
@@ -84,10 +102,28 @@ export function updateTrail(sessionId: string, normalizedX: number, normalizedY:
 
     if (!trails[sessionId]) {
         const geometry = createTrailGeometry();
-        const material = new THREE.MeshStandardMaterial({
-            color: (Math.random() * 0.25 + 0.5) * 0xffffff,
-            emissive: (Math.random() * 0.25 + 0.5) * 0xffffff,
-            emissiveIntensity: 50
+        const material = new THREE.ShaderMaterial({
+            vertexShader: `
+                attribute float size;
+                //attribute vec3 color;
+                varying vec3 vColor;
+
+                void main() {
+                    vColor = color; // Pass the color to the fragment shader
+                    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                    gl_PointSize = size * (300.0 / -mvPosition.z); // Adjust point size with perspective
+                    gl_Position = projectionMatrix * mvPosition;
+                }
+            `,
+            fragmentShader: `
+                varying vec3 vColor;
+
+                void main() {
+                    gl_FragColor = vec4(vColor * 30.0, 1.0); // Use the passed color, multiply it, to do emissive
+                }
+            `,
+            vertexColors: true, // This tells the material to use vertex colors
+            transparent: true,
         });
         const points = new THREE.Points(geometry, material);
         scene.add(points);
@@ -110,8 +146,9 @@ export function updateClick(x: number, y: number) {
     const material = new THREE.MeshStandardMaterial({
         color: (Math.random() * 0.25 + 0.5) * 0xffffff,
         emissive: (Math.random() * 0.25 + 0.5) * 0xffffff,
-        emissiveIntensity: 0.2,
-        transparent: true
+        emissiveIntensity: 2,
+        transparent: true,
+        map: new THREE.TextureLoader().load('circle_02.webp'),
     });
     const circle = new THREE.Mesh(geometry, material);
 
