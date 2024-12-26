@@ -38,3 +38,19 @@ body {
 .link {
   color: rgb(30, 184, 255);
 }
+
+.header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  background-color: transparent;
+}
+.header input[type=range] {
+  opacity: 0.5;
+}

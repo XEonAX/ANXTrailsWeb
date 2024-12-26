@@ -14,6 +14,7 @@ export default defineConfig({
         "three/examples/jsm/postprocessing/RenderPass.js",
         "three/examples/jsm/postprocessing/UnrealBloomPass.js",
         "@microsoft/signalr",
+        "tone",
       ],
       output: {
         paths: {
@@ -26,6 +27,7 @@ export default defineConfig({
             "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/postprocessing/UnrealBloomPass.js",
           "@microsoft/signalr":
             "https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.7/+esm",
+          tone: "https://cdn.jsdelivr.net/npm/tone@15.0.4/+esm",
         },
       },
       preserveEntrySignatures: "allow-extension",

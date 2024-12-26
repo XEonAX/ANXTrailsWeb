@@ -2,7 +2,9 @@ import * as THREE from "three";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { XYGridHelper } from "./xygridhelper";
+import { playSound } from "./sounds";
 interface TrailMap {
     [key: string]: {
         points: THREE.Points<THREE.BufferGeometry<THREE.NormalBufferAttributes>, THREE.ShaderMaterial, THREE.Object3DEventMap>,
@@ -22,11 +24,12 @@ const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100);
 camera.position.z = 5;
 scene.add(camera);
-
+const size = 1; const divisions = 12; const gridHelper = new XYGridHelper(size, divisions); scene.add(gridHelper);
 const renderer = new THREE.WebGLRenderer({ canvas: canvas });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
+// const controls = new OrbitControls(camera, renderer.domElement);
+// controls.autoRotate = true;
 const bloomParams = { exposure: 1, bloomStrength: 1.5, bloomThreshold: 0, bloomRadius: 0 };
 const renderPass = new RenderPass(scene, camera);
 const bloomPass = new UnrealBloomPass(new THREE.Vector2(sizes.width, sizes.height), bloomParams.bloomStrength, bloomParams.bloomRadius, bloomParams.bloomThreshold);
@@ -135,7 +138,7 @@ export function updateTrail(sessionId: string, normalizedX: number, normalizedY:
     trails[sessionId].y = pos.y;
 }
 
-export function updateClick(x: number, y: number) {
+export function updateClick(x: number, y: number, makeNoise: boolean) {
     let vector = new THREE.Vector3(x, y, 0.5);
     vector.unproject(camera);
     var dir = vector.sub(camera.position).normalize();
@@ -156,10 +159,16 @@ export function updateClick(x: number, y: number) {
 
     pings.push({ mesh: circle, scale: 0.1, opacity: 0.5 });
     scene.add(circle);
+    if (makeNoise)
+        playSound(x, y);
 }
 
+let old: number = 0;
 // Animation loop
-function tick() {
+function tick(now: number) {
+    let dt = now - old;
+    old = now;
+    // controls.update();
     composer.render();
     connections.forEach(sessionId => {
         if (trails[sessionId]) {
@@ -167,8 +176,8 @@ function tick() {
         }
     });
     pings.forEach((ping, index) => {
-        ping.scale += 0.1;
-        ping.opacity -= 0.005;
+        ping.scale += 0.6;
+        ping.opacity -= 0.7 * (dt / 1000);
         ping.mesh.scale.set(ping.scale, ping.scale, ping.scale);
         ping.mesh.material.opacity = ping.opacity;
 
@@ -179,7 +188,7 @@ function tick() {
     });
     window.requestAnimationFrame(tick);
 }
-tick();
+tick(0);
 
 window.addEventListener('resize', () => {
     // Update sizes

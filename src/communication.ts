@@ -27,8 +27,8 @@ connection.on("move", (connId: string, i: number, x: number, y: number) => {
     }
 });
 
-connection.on("click", (x: number, y: number) => {
-    updateClick(x, y);
+connection.on("click", (connId: string, x: number, y: number) => {
+    updateClick(x, y, connId != connection.connectionId);
 });
 
 connection
