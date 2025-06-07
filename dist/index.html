@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    if (window.location.hostname.includes("stonks.aeonax.com"))
+      window.location.replace("https://stonks.aeonax.com:8443")
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🪃</text></svg>" />
+  <title>ANX.Trails - Realtime Multiplayer Neon Trails and Pings</title>
+  <meta name="description" content="Make neon glowing trails with your friends on our canvas. A playful playground for your loved ones.">
+  <meta name="author" content="AEonAX">
+  <meta name="copyright" content="2024">
+  <meta name="robots" content="index, follow">
+
+  <!-- Google / Search Engine Tags -->
+  <meta itemprop="name" content="ANX.Trails - Realtime Multiplayer Neon Trails and Pings" />
+  <meta itemprop="description" content="Make neon glowing trails with your friends on our canvas. A playful playground for your loved ones." />
+  <meta itemprop="image" content="https://trails.aeonax.com/preview.webp" />
+
+  <!-- Facebook Meta Tags -->
+  <meta property="og:url" content="https://trails.aeonax.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ANX.Trails - Realtime Multiplayer Neon Trails and Pings" />
+  <meta property="og:description" content="Make neon glowing trails with your friends on our canvas. A playful playground for your loved ones." />
+  <meta property="og:image" content="https://trails.aeonax.com/preview.webp" />
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:site" content="@aeonax">
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="ANX.Trails - Realtime Multiplayer Neon Trails and Pings" />
+  <meta name="twitter:description" content="Make neon glowing trails with your friends on our canvas. A playful playground for your loved ones." />
+  <meta name="twitter:image" content="https://trails.aeonax.com/preview.webp" />
+  <meta name="twitter:image:alt" content="Neon trails on dark background from multiple people">
+
+  <script type="importmap">
+  	{
+  		"imports": {
+  			"three": "https://cdn.jsdelivr.net/npm/three@0.169.0/+esm",
+  			"three/examples/jsm/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+        "tone": "https://cdn.jsdelivr.net/npm/tone@15.0.4/+esm"
+  		}
+  	}
+  </script>
+  <script type="module" crossorigin src="/assets/main-DSFmPUPd.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main-B7Y43hx7.css">
+</head>
+
+<body>
+  <div id="app">
+    <canvas class="webgl"></canvas>
+
+  </div>
+  <div class="header">
+    <span>🔈</span> <input id="volume" type="range" min="-60" max="0" value="-40">
+  </div>
+  <div class="footer">
+    <span>Made with <span class="heart">♥</span> by <a class="link" href="https://studios.aeonax.com">AEonAX</a></span>
+    <span title="Max Users Connected">
+      <span id="ConnCount">0</span>
+      <svg xmlns="http://www.w3.org/2000/svg" style="height: 0.8rem;" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+        <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+      </svg>
+    </span>
+    <span style="width: 50px;"><span id="Frequency">~</span>Hz</span>
+    <a id="FullscreenToggle">Go Big</a>
+  </div>
+</body>
+
+</html>
